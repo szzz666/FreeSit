@@ -9,9 +9,9 @@ import cn.nukkit.math.Vector3f;
 import cn.nukkit.nbt.tag.CompoundTag;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ChairEntity extends EntityVehicle implements EntityRideable {
-
     public ChairEntity(FullChunk chunk, CompoundTag nbt) {
         super(chunk, nbt);
         this.setDataFlag(Entity.DATA_FLAGS, Entity.DATA_FLAG_INVISIBLE, true, false);
@@ -44,8 +44,10 @@ public class ChairEntity extends EntityVehicle implements EntityRideable {
     @Override
     public void close() {
         super.close();
-        if (!this.passengers.isEmpty()) {
-            for (Entity passenger : new ArrayList<>(this.passengers)) {
+        if (this.passengers != null && !this.passengers.isEmpty()) {
+            List<Entity> copy = new ArrayList<>(this.passengers.size());
+            copy.addAll(this.passengers);
+            for (Entity passenger : copy) {
                 this.dismountEntity(passenger);
             }
         }
